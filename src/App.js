@@ -1,24 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useState } from "react";
+import Destinations from "./components/Destinations";
+import Result from "./components/Result";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Info from "./components/Info"
+
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#7b1fa2"
+    },
+  },
+});
 
 function App() {
+  const [final, setFinal] = useState({
+    body: "",
+    time: 0,
+  });
+  const [auth, setAuth] = useState(false);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <Routes>
+          <Route
+            path="/"
+            element={<Destinations setFinal={setFinal} setAuth={setAuth} />}
+          />
+          {auth && <Route path="/result" element={<Result final={final} />} />}
+          <Route path="/info" element={<Info />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </div>
+    </ThemeProvider>
   );
 }
 
